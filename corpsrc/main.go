@@ -27,6 +27,7 @@ func main() {
 	InitBeego()
 	beego.SetStaticPath("/", "../www")
 
+	beego.Router("/wechat/server",&WechatServerController{})
 	beego.Router("/login",&LoginController{})
 	beego.Router("/*", &MainController{})
 
