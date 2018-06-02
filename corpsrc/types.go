@@ -515,3 +515,90 @@ type AppchatSendMpnewsArticles struct {
 	Content          string `json:"content"`
 	Digest           string `json:"digest"`
 }
+
+//发送应用消息
+type MessageSendResponseBasic struct {
+	Errcode      int    `json:"errcode"`
+	Errmsg       string `json:"errmsg"`
+	Invaliduser  string `json:"invaliduser"`
+	Invalidparty string `json:"invalidparty"`
+	Invalidtag   string `json:"invalidtag"`
+}
+
+//发送应用消息基础结构
+type MessageSendBasic struct {
+	Touser  string `json:"touser"`
+	Toparty string `json:"toparty"`
+	Totag   string `json:"totag"`
+	Msgtype string `json:"msgtype"`
+	Agentid int    `json:"agentid"`
+}
+
+//发送应用文本消息
+type MessageSendText struct {
+	MessageSendBasic
+	Text struct {
+		Content string `json:"content"`
+	} `json:"text"`
+}
+
+//发送应用图片消息
+type MessageSendImage struct {
+	MessageSendBasic
+	Image struct {
+		MediaId string `json:"media_id"`
+	} `json:"image"`
+}
+
+//发送应用图片消息
+type MessageSendVoice struct {
+	MessageSendBasic
+	Voice struct {
+		MediaId string `json:"media_id"`
+	} `json:"voice"`
+}
+
+//发送应用视频消息
+type MessageSendVideo struct {
+	MessageSendBasic
+	Video struct {
+		MediaId     string `json:"media_id"`
+		Title       string `json:"title"`
+		Description string `json:"description"`
+	} `json:"video"`
+}
+
+//发送应用文件消息
+type MessageSendFile struct {
+	MessageSendBasic
+	File struct {
+		MediaId string `json:"media_id"`
+	} `json:"file"`
+}
+
+//发送应用文本卡消息
+type MessageSendTextCard struct {
+	MessageSendBasic
+	Textcard struct {
+		Title       string `json:"title"`
+		Description string `json:"description"`
+		Url         string `json:"url"`
+		Btntxt      string `json:"btntxt"`
+	} `json:"textcard"`
+}
+
+//发送应用图文消息News
+type MessageSendNews struct {
+	MessageSendBasic
+	News struct {
+		Articles []AppchatSendNewsArticles `json:"articles"`
+	} `json:"news"`
+}
+
+//发送应用图文消息mpnews
+type MessageSendMpnews struct {
+	MessageSendBasic
+	Mpnews struct {
+		Articles []AppchatSendMpnewsArticles `json:"articles"`
+	} `json:"mpnews"`
+}
