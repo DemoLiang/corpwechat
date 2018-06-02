@@ -135,16 +135,16 @@ type VideoResponseMessage struct {
 }
 
 //图文消息响应格式
-type ImageTextResponseMessage struct {
+type NewsResponseMessage struct {
 	BasicResponseInfo
 	ArticleCount int `xml:"ArticleCount"`
 	Articles     struct {
-		Item []ImageTextItem `xml:"Item"`
+		Item []NewsItem `xml:"Item"`
 	} `xml:"Articles"`
 }
 
 //图文列表结构
-type ImageTextItem struct {
+type NewsItem struct {
 	Title       string `xml:"Title"`
 	Description string `xml:"Description"`
 	PicUrl      string `xml:"PicUrl"`
@@ -377,4 +377,141 @@ type LocationSelectSendLocationInfo struct {
 	Scale     int     `xml:"Scale"`
 	Label     string  `xml:"Label"`
 	Poiname   string  `xml:"Poiname"`
+}
+
+//群聊消息基础响应结构
+type AppchatBasicResponseMessage struct {
+	Errcode int    `json:"errcode"`
+	Errmsg  string `json:"errmsg"`
+}
+
+//创建群聊会话
+type AppchatCreateRequestMessage struct {
+	Name     string   `json:"name"`
+	Owner    string   `json:"owner"`
+	Userlist []string `json:"userlist"`
+	Chatid   string   `json:"chatid"`
+}
+
+//创建群聊响应消息
+type AppchatCreateResponseMessage struct {
+	AppchatBasicResponseMessage
+	Chatid string `json:"chatid"`
+}
+
+//修改群聊会话
+type AppchatUpdateRequestMessage struct {
+	Chatid      string   `json:"chatid"`
+	Name        string   `json:"name"`
+	Owner       string   `json:"owner"`
+	AddUserList []string `json:"add_user_list"`
+	DelUserList []string `json:"del_user_list"`
+}
+
+//获取群聊会话
+type AppchatGetResponsetMessage struct {
+	AppchatBasicResponseMessage
+	ChatInfo AppchatGetChatInfo `json:"chat_info"`
+}
+
+//群聊会话信息
+type AppchatGetChatInfo struct {
+	Chatid   string   `json:"chatid"`
+	Name     string   `json:"name"`
+	Owner    string   `json:"owner"`
+	Userlist []string `json:"userlist"`
+}
+
+//群聊消息推送基础结构
+type AppchatSendBasic struct {
+	Chatid  string `json:"chatid"`
+	Msgtype string `json:"msgtype"`
+	Safe    int    `json:"safe"`
+}
+
+//群聊消息 文本消息推送
+type AppchatSendText struct {
+	AppchatSendBasic
+	Text struct {
+		Content string `json:"content"`
+	} `json:"text"`
+}
+
+//群聊消息 图片消息推送
+type AppchatSendImage struct {
+	AppchatSendBasic
+	Image struct {
+		MediaId string `json:"media_id"`
+	} `json:"image"`
+}
+
+//语音消息
+type AppchatSendVoice struct {
+	AppchatSendBasic
+	Voice struct {
+		MediaId string `json:"media_id"`
+	} `json:"voice"`
+}
+
+//视频消息
+type AppchatSendVideo struct {
+	AppchatSendBasic
+	Video struct {
+		MediaId     string `json:"media_id"`
+		Description string `json:"description"`
+	} `json:"video"`
+}
+
+//文件消息
+type AppchatSendFile struct {
+	AppchatSendBasic
+	File struct {
+		MediaId string `json:"media_id"`
+	} `json:"file"`
+}
+
+//文本卡消息
+type AppchatSendTextCard struct {
+	AppchatSendBasic
+	Textcard struct {
+		Title       string `json:"title"`
+		Description string `json:"description"`
+		Url         string `json:"url"`
+		Btntxt      string `json:"btntxt"`
+	} `json:"textcard"`
+}
+
+//图文消息推送News
+type AppchatSendNews struct {
+	AppchatSendBasic
+	News struct {
+		Articles []AppchatSendNewsArticles `json:"articles"`
+	} `json:"news"`
+}
+
+//news文章结构
+type AppchatSendNewsArticles struct {
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Url         string `json:"url"`
+	Picurl      string `json:"picurl"`
+	Btntxt      string `json:"btntxt"`
+}
+
+//图文消息推送mpnews
+type AppchatSendMpnews struct {
+	AppchatSendBasic
+	Mpnews struct {
+		Articles []AppchatSendMpnewsArticles `json:"articles"`
+	} `json:"mpnews"`
+}
+
+//mpnews文章结构
+type AppchatSendMpnewsArticles struct {
+	Title            string `json:"title"`
+	ThumbMediaId     string `json:"thumb_media_id"`
+	Author           string `json:"author"`
+	ContentSourceUrl string `json:"content_source_url"`
+	Content          string `json:"content"`
+	Digest           string `json:"digest"`
 }
