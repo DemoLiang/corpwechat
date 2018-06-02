@@ -24,3 +24,45 @@ var CorpAppMap = map[string]CorpWeChatApp{
 ```
 beego.Router("/wechat/demo", &DemoAppController{AgentId: "1000002"})
 ```
+
+
+* 其中type中定义了大部分的消息推送的结构定义可以通过解析下发的消息到结构
+以及响应消息结构定义，xml编码响应消息返回给微信
+```
+//基础响应信息，返回格式
+type BasicResponseInfo struct {
+	XMLName      xml.Name `xml:"xml"`
+	ToUserName   string   `xml:"ToUserName"`
+	FromUserName string   `xml:"FromUserName"`
+	CreateTime   int64    `xml:"CreateTime"`
+	MsgType      string   `xml:"MsgType"`
+}
+
+//文本请求body content 内容
+type TextRequestMessage struct {
+	BasicRequestInfo
+	Content string `xml:"Content"`
+	MsgId   string `xml:"MsgId"`
+}
+
+//文本请求响应body content 内容
+type TextResponseMessage struct {
+	BasicResponseInfo
+	Content string `xml:"Content"`
+}
+
+//图片消息请求body content 内容
+type ImageRequestMessage struct {
+	BasicRequestInfo
+	PicUrl   string `xml:"PicUrl"`
+	MedialId string `xml:"MedialId"`
+}
+
+//图片消息回复消息格式
+type ImageResponseMessage struct {
+	BasicResponseInfo
+	Image struct {
+		MediaId string `xml:"MediaId"`
+	} `xml:"Image"`
+}
+```
