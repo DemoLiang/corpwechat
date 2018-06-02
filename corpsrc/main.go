@@ -12,7 +12,7 @@ func enableHTTPS() {
 	beego.BConfig.Listen.HTTPSPort = 443
 	beego.BConfig.Listen.HTTPPort = 80
 	beego.BConfig.Listen.EnableHTTPS = true
-	//beego.BConfig.Listen.EnableHTTP = true
+	beego.BConfig.Listen.EnableHTTP = true
 	beego.BConfig.CopyRequestBody = true
 }
 
@@ -21,14 +21,15 @@ func InitBeego() {
 }
 
 var weChatLock *sync.RWMutex
-var AccessTokenMap  = map[string]string{}
+var AccessTokenMap = map[string]string{}
 
 func main() {
 	InitBeego()
 	beego.SetStaticPath("/", "../www")
 
-	beego.Router("/wechat/server",&WechatServerController{})
-	beego.Router("/login",&LoginController{})
+	beego.Router("/wechat/contact", &ContactAppController{AgentId: "contact"})
+	beego.Router("/wechat/demo", &DemoAppController{AgentId: "1000002"})
+	beego.Router("/wechat/demo/login", &DemoAppLoginController{AgentId: "1000002"})
 	beego.Router("/*", &MainController{})
 
 	beego.InsertFilter("*", beego.BeforeRouter, cors.Allow(&cors.Options{
