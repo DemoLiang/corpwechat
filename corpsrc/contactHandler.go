@@ -1,14 +1,14 @@
 package main
 
 import (
+	"bytes"
+	"crypto/sha1"
+	"encoding/base64"
+	"encoding/binary"
+	"fmt"
 	"github.com/astaxie/beego"
 	"sort"
 	"strings"
-	"crypto/sha1"
-	"fmt"
-	"encoding/base64"
-	"bytes"
-	"encoding/binary"
 )
 
 type ContactAppController struct {
@@ -46,7 +46,7 @@ func (this *ContactAppController) Get() {
 	} else {
 		//配置加密请求URL 的校验
 		aesMsg, _ := base64.StdEncoding.DecodeString(echostr)
-		orgMsg, err := AesDecrypt(aesMsg,[]byte(CorpAppMap[this.AgentId].AesKey))
+		orgMsg, err := AesDecrypt(aesMsg, []byte(CorpAppMap[this.AgentId].AesKey))
 		if err != nil {
 			panic(err)
 		}
@@ -65,4 +65,3 @@ func (this *ContactAppController) Get() {
 func (this *ContactAppController) Post() {
 	return
 }
-
