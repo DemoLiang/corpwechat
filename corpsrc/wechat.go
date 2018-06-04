@@ -198,6 +198,13 @@ func ParseEncryptBasicRequestInfo(plainText []byte) (*BasicRequestInfo, error) {
 	return basicRequestInfo, nil
 }
 
+//XML 解析到通讯录便跟世界爱你
+func ParseEncryptEventChangeContact(plainText []byte) (*ChangeContactRequestEventMessage, error) {
+	changeContact := &ChangeContactRequestEventMessage{}
+	xml.Unmarshal(plainText, &changeContact)
+	return changeContact, nil
+}
+
 //读取解密后的内容
 func ParseEncryptRequestBodyContent(plainText []byte) ([]byte, error) {
 	// Read length

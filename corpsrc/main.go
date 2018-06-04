@@ -26,10 +26,10 @@ var AccessTokenMap = map[string]string{}
 func main() {
 	InitBeego()
 	beego.SetStaticPath("/", "../www")
-	beego.Router("/wechat/contact", &ContactAppController{AgentId: "contact"})
 	beego.Router("/wechat/contact/user/simplelist", &ContactAppUserSimplelistController{AgentId: "contact"})
-	beego.Router("/wechat/demo", &DemoAppController{AgentId: "1000002"})
 	beego.Router("/wechat/demo/login", &DemoAppLoginController{AgentId: "1000002"})
+	beego.Router("/wechat/demo", &DemoAppController{AgentId: "1000002"})
+	beego.Router("/wechat/contact", &ContactAppController{AgentId: "contact"})
 	beego.Router("/*", &MainController{})
 
 	beego.InsertFilter("*", beego.BeforeRouter, cors.Allow(&cors.Options{
