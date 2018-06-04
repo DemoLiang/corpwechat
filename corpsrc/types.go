@@ -253,8 +253,8 @@ type ContactExtAttr struct {
 
 //通讯录扩展数据项
 type ContactExtAttrItem struct {
-	Name  string `xml:"Name"`
-	Value string `xml:"Value"`
+	Name  string `xml:"Name" json:"name"`
+	Value string `xml:"Value" json:"value"`
 }
 
 //新增部门请求事件
@@ -380,7 +380,7 @@ type LocationSelectSendLocationInfo struct {
 }
 
 //群聊消息基础响应结构
-type AppchatBasicResponseMessage struct {
+type BasicResponseMessage struct {
 	Errcode int    `json:"errcode"`
 	Errmsg  string `json:"errmsg"`
 }
@@ -395,7 +395,7 @@ type AppchatCreateRequestMessage struct {
 
 //创建群聊响应消息
 type AppchatCreateResponseMessage struct {
-	AppchatBasicResponseMessage
+	BasicResponseMessage
 	Chatid string `json:"chatid"`
 }
 
@@ -410,7 +410,7 @@ type AppchatUpdateRequestMessage struct {
 
 //获取群聊会话
 type AppchatGetResponsetMessage struct {
-	AppchatBasicResponseMessage
+	BasicResponseMessage
 	ChatInfo AppchatGetChatInfo `json:"chat_info"`
 }
 
@@ -601,4 +601,228 @@ type MessageSendMpnews struct {
 	Mpnews struct {
 		Articles []AppchatSendMpnewsArticles `json:"articles"`
 	} `json:"mpnews"`
+}
+
+//创建部门
+type DepartmentManagementRequestCreate struct {
+	Id       int    `json:"id"`
+	Name     string `json:"name"`
+	Parentid int    `json:"parentid"`
+	Order    int    `json:"order"`
+}
+
+//创建部门返回结果
+type DepartmentManagemenResponseCreate struct {
+	BasicResponseMessage
+	Id int `json:"id"`
+}
+
+//更新部门
+type DepartmentManagementRequestUpdate struct {
+	Id       int    `json:"id"`
+	Name     string `json:"name"`
+	Parentid int    `json:"parentid"`
+	Order    int    `json:"order"`
+}
+
+//部门管理，获取部门列表
+type DepartmentManagementResponseList struct {
+	BasicResponseMessage
+	Department []struct {
+		Id       int    `json:"id"`
+		Name     string `json:"name"`
+		Parentid int    `json:"parentid"`
+		Order    int    `json:"order"`
+	} `json:"department"`
+}
+
+//标签管理 创建标签请求
+type TagManagementRequestCreate struct {
+	Tagname string `json:"tagname"`
+	Tagid   int    `json:"tagid"`
+}
+
+//标签管理 创建标签响应
+type TagManagementResponseCreate struct {
+	BasicResponseMessage
+	Tagid int `json:"tagid"`
+}
+
+//标签管理 标签更新
+type TagManagementRequestUpdate struct {
+	Tagname string `json:"tagname"`
+	Tagid   int    `json:"tagid"`
+}
+
+//标签管理 标签更新
+type TagManagementResponseTagUserList struct {
+	BasicResponseMessage
+	Tagname  string `json:"tagname"`
+	Userlist []struct {
+		Userid string `json:"userid"`
+		Name   string `json:"name"`
+	} `json:"userlist"`
+	Partylist []int `json:"partylist"`
+}
+
+//标签管理 增加标签成员
+type TagManagementRequestAddtagusers struct {
+	Tagid     int      `json:"tagid"`
+	Userlist  []string `json:"userlist"`
+	Partylist []int    `json:"partylist"`
+}
+
+//标签管理 增加标签成员
+type TagManagementRequestDeltagusers struct {
+	Tagid     int      `json:"tagid"`
+	Userlist  []string `json:"userlist"`
+	Partylist []int    `json:"partylist"`
+}
+
+//标签管理 增加标签成员
+type TagManagementResponseTagList struct {
+	BasicResponseMessage
+	Taglist []struct {
+		Tagid   int    `json:"tagid"`
+		Tagname string `json:"tagname"`
+	} `json:"taglist"`
+}
+
+//成员管理 创建成员
+type CorpContactUserRequesetCreate struct {
+	Userid        string `json:"userid"`
+	Name          string `json:"name"`
+	EnglishName   string `json:"english_name"`
+	Mobile        string `json:"mobile"`
+	Department    []int  `json:"department"`
+	Order         []int  `json:"order"`
+	Position      string `json:"position"`
+	Gender        string `json:"gender"`
+	Email         string `json:"email"`
+	Isleader      int    `json:"isleader"`
+	Enable        int    `json:"enable"`
+	AvatarMediaid string `json:"avatar_mediaid"`
+	Telephone     string `json:"telephone"`
+	Extattr       struct {
+		Attrs []ContactExtAttrItem `json:"attrs"`
+	} `json:"extattr"`
+	ToInvite        bool `json:"to_invite"`
+	ExternalProfile struct {
+		ExternalAttr []struct {
+			Type int    `json:"type"`
+			Name string `json:"name"`
+			ExternalProfileExternalAttr
+		} `json:"external_attr"`
+	} `json:"external_profile"`
+}
+
+//用户管理，读取成员
+type CorpContactUserResponseUserGet struct {
+	BasicResponseMessage
+	CorpContactUserInfo
+}
+
+//用户管理，更新成员
+type CorpContactUserRequestUpdate struct {
+	Userid        string `json:"userid"`
+	Name          string `json:"name"`
+	Department    []int  `json:"department"`
+	Order         []int  `json:"order"`
+	Position      string `json:"position"`
+	Mobile        string `json:"mobile"`
+	Gender        string `json:"gender"`
+	Email         string `json:"email"`
+	Isleader      int    `json:"isleader"`
+	Enable        int    `json:"enable"`
+	AvatarMediaid string `json:"avatar_mediaid"`
+	Telephone     string `json:"telephone"`
+	EnglishName   string `json:"english_name"`
+	Extattr       struct {
+		Attrs []ContactExtAttrItem `json:"attrs"`
+	} `json:"extattr"`
+	Status          int    `json:"status"`
+	QrCode          string `json:"qr_code"`
+	ExternalProfile struct {
+		ExternalAttr []struct {
+			Type int    `json:"type"`
+			Name string `json:"name"`
+			ExternalProfileExternalAttr
+		} `json:"external_attr"`
+	} `json:"external_profile"`
+}
+
+//批量删除成员
+type CorpContactUserRequestBatchdelete struct {
+	Useridlist []string `json:"useridlist"`
+}
+
+//获取部门成员
+type CorpContactUserResponseSimplelist struct {
+	BasicResponseMessage
+	Userlist []struct {
+		Userid     string `json:"userid"`
+		Name       string `json:"name"`
+		Department []int  `json:"department"`
+	} `json:"userlist"`
+}
+
+//获取部门成员详情
+type CorpContactUserResponseUserList struct {
+	BasicResponseMessage
+	Userlist []CorpContactUserInfo `json:"userlist"`
+}
+
+//user info 成员详情
+type CorpContactUserInfo struct {
+	Userid      string `json:"userid"`
+	Name        string `json:"name"`
+	Department  []int  `json:"department"`
+	Order       []int  `json:"order"`
+	Position    string `json:"position"`
+	Mobile      string `json:"mobile"`
+	Gender      string `json:"gender"`
+	Email       string `json:"email"`
+	Isleader    int    `json:"isleader"`
+	Avatar      string `json:"avatar"`
+	Telephone   string `json:"telephone"`
+	EnglishName string `json:"english_name"`
+	Extattr     struct {
+		Attrs []ContactExtAttrItem `json:"attrs"`
+	} `json:"extattr"`
+	Status          int    `json:"status"`
+	QrCode          string `json:"qr_code"`
+	ExternalProfile struct {
+		ExternalAttr []struct {
+			Type int    `json:"type"`
+			Name string `json:"name"`
+			ExternalProfileExternalAttr
+		} `json:"external_attr"`
+	} `json:"external_profile"`
+}
+
+//用户的扩展属性
+type ExternalProfileExternalAttr struct {
+	Text struct {
+		Value string `json:"value"`
+	} `json:"text"`
+	Web struct {
+		Url   string `json:"url"`
+		Title string `json:"title"`
+	} `json:"web"`
+	Miniprogram struct {
+		Appid    string `json:"appid"`
+		Pagepath string `json:"pagepath"`
+		Title    string `json:"title"`
+	} `json:"miniprogram"`
+}
+
+//userid 与 openid 互换请求
+type CorpContactRequestConvertToOpenid struct {
+	Userid string `json:"userid"`
+}
+
+//userid 与 openid 互换响应
+type CorpContactResponseConvertToOpenid struct {
+	BasicResponseMessage
+	Openid string `json:"openid"`
 }

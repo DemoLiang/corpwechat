@@ -5,6 +5,7 @@ import (
 	"crypto/sha1"
 	"encoding/base64"
 	"encoding/binary"
+	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego"
 	"sort"
@@ -63,5 +64,37 @@ func (this *ContactAppController) Get() {
 }
 
 func (this *ContactAppController) Post() {
+	return
+}
+
+//获取部门成员
+type ContactAppUserSimplelistController struct {
+	beego.Controller
+	AgentId string
+}
+
+func (this *ContactAppUserSimplelistController) Get() {
+	departmentId := this.GetString("department_id")
+	fetchChild := this.GetString("fetch_child")
+	ReqUrl := "https://qyapi.weixin.qq.com/cgi-bin/user/simplelist"
+	ReqQueryHead := map[string]string{
+		"department_id": departmentId,
+		"access_token":  AccessTokenMap[this.AgentId],
+		"fetch_child":   fetchChild,
+	}
+	body, err := HttpGet(ReqUrl, ReqQueryHead)
+	if err != nil {
+		Log("Http Get Error:%v\n", err)
+	}
+	var simplelist CorpContactUserResponseSimplelist
+	err = json.Unmarshal(body.([]byte), &simplelist)
+	Log("jsonObj:%v err:%v\n", simplelist, err)
+	this.Data["json"] = simplelist
+	this.ServeJSON()
+	return
+}
+
+func (this *ContactAppUserSimplelistController) Post() {
+	this.Get()
 	return
 }

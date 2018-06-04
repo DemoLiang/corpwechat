@@ -7,8 +7,8 @@ import (
 )
 
 func enableHTTPS() {
-	beego.BConfig.Listen.HTTPSCertFile = "../cert/server.crt"
-	beego.BConfig.Listen.HTTPSKeyFile = "../cert/server.key"
+	beego.BConfig.Listen.HTTPSCertFile = "cert/server.crt"
+	beego.BConfig.Listen.HTTPSKeyFile = "cert/server.key"
 	beego.BConfig.Listen.HTTPSPort = 443
 	beego.BConfig.Listen.HTTPPort = 80
 	beego.BConfig.Listen.EnableHTTPS = true
@@ -26,8 +26,8 @@ var AccessTokenMap = map[string]string{}
 func main() {
 	InitBeego()
 	beego.SetStaticPath("/", "../www")
-
 	beego.Router("/wechat/contact", &ContactAppController{AgentId: "contact"})
+	beego.Router("/wechat/contact/user/simplelist", &ContactAppUserSimplelistController{AgentId: "contact"})
 	beego.Router("/wechat/demo", &DemoAppController{AgentId: "1000002"})
 	beego.Router("/wechat/demo/login", &DemoAppLoginController{AgentId: "1000002"})
 	beego.Router("/*", &MainController{})
