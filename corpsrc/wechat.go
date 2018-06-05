@@ -231,10 +231,39 @@ func ValidateAppId(id []byte) bool {
 	return false
 }
 
+//Http get 请求
 func HttpGet(ReqUrl string, ReqQueryHead map[string]string) (interface{}, error) {
 	client := &http.Client{}
 
 	req, err := http.NewRequest("Get", ReqUrl, nil)
+	if err != nil {
+		Log("WeChatAuth err:%v", err)
+		return nil, err
+	}
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	q := req.URL.Query()
+	for key, data := range ReqQueryHead {
+		q.Add(key, data)
+	}
+	req.URL.RawQuery = q.Encode()
+	Log(req.URL.String())
+
+	resp, err := client.Do(req)
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Printf("err:%v", err)
+	}
+	Log("resp.Body:%s\n", body)
+	return body, nil
+}
+
+//http post 请求
+func HttpPost(ReqUrl string, reqBody string, ReqQueryHead map[string]string) (interface{}, error) {
+	client := &http.Client{}
+
+	req, err := http.NewRequest("POST", ReqUrl, strings.NewReader(reqBody))
 	if err != nil {
 		Log("WeChatAuth err:%v", err)
 		return nil, err

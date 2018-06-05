@@ -161,3 +161,32 @@ func (this *ContactAppUserSimplelistController) Post() {
 	this.Get()
 	return
 }
+
+//创建部门
+type ContactAppDepartmentCreateController struct {
+	beego.Controller
+	AgentId string
+}
+
+func (this *ContactAppDepartmentCreateController) Get() {
+	this.Post()
+	return
+}
+
+func (this *ContactAppDepartmentCreateController) Post() {
+	reqBody := this.Ctx.Input.RequestBody
+	ReqQueryHead := map[string]string{
+		"access_token": AccessTokenMap[this.AgentId],
+	}
+	ReqUrl := "https://qyapi.weixin.qq.com/cgi-bin/department/create"
+	body, err := HttpPost(ReqUrl, string(reqBody), ReqQueryHead)
+	if err != nil {
+		Log("Http Get Error:%v\n", err)
+	}
+	var departmentCreateResp DepartmentManagemenResponseCreate
+	err = json.Unmarshal(body.([]byte), &departmentCreateResp)
+	Log("jsonObj:%v err:%v\n", departmentCreateResp, err)
+	this.Data["json"] = departmentCreateResp
+	this.ServeJSON()
+	return
+}
