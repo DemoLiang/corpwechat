@@ -14,4 +14,3 @@ func (this *MainController) Post() {
 	this.Ctx.WriteString("hello world")
 	return
 }
-
